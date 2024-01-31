@@ -1,5 +1,9 @@
 import sys
 
+import os
+
+from holypipette.utils.supabaseDBstuff import supabase
+
 from PyQt5 import QtWidgets, QtCore
 
 from holypipette.log_utils import console_logger
@@ -12,6 +16,7 @@ from setup_fake_rig import *
 console_logger()  # Log to the standard console as well
 
 app = QtWidgets.QApplication(sys.argv)
+
 
 pipette_controller = PipetteInterface(stage, microscope, camera, unit, worldModel)
 patch_controller = AutoPatchInterface(amplifier, pressure, pipette_controller, worldModel)

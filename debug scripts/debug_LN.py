@@ -87,6 +87,7 @@ class TestGui(QtWidgets.QMainWindow):
                 distance = 2.5
             else:
                 distance = 10
+
             if event.key() == Qt.Key_Left:
                 stage.relative_move(-distance,0)
             elif event.key() == Qt.Key_Right:
