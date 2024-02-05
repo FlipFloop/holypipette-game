@@ -5,12 +5,12 @@ a = Analysis(
     ['patch_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('holypipette/devices/camera/FakeMicroscopeImgs/*','.'),('holypipette/gui/tutorial_media/XBox.png','.'),('pressure','pressure')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['PyQt6'],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
@@ -20,7 +20,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='patch_gui',
+    name='HolyPipette',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -39,11 +39,11 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='patch_gui',
+    name='HolyPipette',
 )
 app = BUNDLE(
     coll,
-    name='patch_gui.app',
-    icon=None,
+    name='HolyPipette.app',
+    icon='holypipette.icns',
     bundle_identifier=None,
 )
