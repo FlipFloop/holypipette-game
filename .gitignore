@@ -5,6 +5,7 @@ setup_script.py*
 screenshots/
 docs/
 dist/
+build/
 *.egg-info/
 .DS_Store
 output
