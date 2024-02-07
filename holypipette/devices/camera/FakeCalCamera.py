@@ -8,6 +8,8 @@ import random
 import imageio
 import sys
 import os
+from holypipette.utils.supabaseDBstuff import supabase
+
 
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 from enum import Enum
@@ -264,6 +266,7 @@ class Telemetry():
             return
         
         time_since_init = time.time() - self.initTime
+        supabase.table("telemetry").insert({"event": event.value, "time": time_since_init}).execute()
         with open(self.fileName, 'a') as f:
             f.write(f'{time_since_init}, {event.value}\n')
 

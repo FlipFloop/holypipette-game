@@ -74,10 +74,10 @@ class Manipulator(TaskController):
         # y is 2
         # print(type(x))
         
-        if axis == 1:
-            supabase.table("stage_movement").insert({ "device_id": 32432, "x": int(x), "y": 0}).execute()
-        else:
-            supabase.table("stage_movement").insert({ "device_id": 32432, "x": 0, "y": int(x)}).execute()
+        # if axis == 1:
+        #     supabase.table("stage_movement").insert({ "device_id": 32432, "x": int(x), "y": 0}).execute()
+        # else:
+        #     supabase.table("stage_movement").insert({ "device_id": 32432, "x": 0, "y": int(x)}).execute()
         self.absolute_move(self.position(axis)+x, axis)
 
     def position_group(self, axes):
