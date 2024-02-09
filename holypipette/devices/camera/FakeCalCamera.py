@@ -8,7 +8,7 @@ import random
 import imageio
 import sys
 import os
-from holypipette.utils.supabaseDBstuff import supabase
+from holypipette.utils.supabaseInstance import supabase
 
 
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
@@ -55,8 +55,8 @@ class WorldModel():
         self.time_to_seal = 5 #seconds
         self.is_near_cell = False
 
-        self.telemetry = Telemetry(is_enabled=False) #disable for packaging into exe
-        # self.telemetry = Telemetry(is_enabled=True) #disable for packaging into exe
+        self.telemetry = Telemetry(is_enabled=False) # ! disable for packaging into exe
+        # self.telemetry = Telemetry(is_enabled=True) # ! disable for packaging into exe
     
     def _setupPipetteResistances(self):
         self.normalResistance = np.random.randint(4e6, 7e6, dtype=np.int64) #4-7 Mohm

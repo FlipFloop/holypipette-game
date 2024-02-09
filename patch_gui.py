@@ -2,7 +2,7 @@ import sys
 
 import os
 
-from holypipette.utils.supabaseDBstuff import supabase
+# from holypipette.utils.supabaseInstance import supabase
 
 from PyQt5 import QtWidgets, QtCore
 

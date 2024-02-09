@@ -39,10 +39,10 @@ class PatchGui(ManipulatorGui):
         man_button_tab = ManualPatchButtons(self.patch_interface, pipette_interface, self.start_task, self.interface_signals)
         self.add_tab(man_button_tab, 'Manual Patching', index = 0)
 
-        #add automatic patching button tab
-        auto_button_tab = AutoPatchButtons(self.patch_interface, pipette_interface, self.start_task, self.interface_signals)
-        # self.add_config_gui(self.patch_interface.config)
-        self.add_tab(auto_button_tab, 'Automatic Patching', index = 1)
+        #! add automatic patching button tab
+        # auto_button_tab = AutoPatchButtons(self.patch_interface, pipette_interface, self.start_task, self.interface_signals)
+        # # self.add_config_gui(self.patch_interface.config)
+        # self.add_tab(auto_button_tab, 'Automatic Patching', index = 1)
 
         # Update the pressure and information in the status bar
         self.pressure_timer = QtCore.QTimer()

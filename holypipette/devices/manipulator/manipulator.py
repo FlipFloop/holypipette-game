@@ -12,7 +12,7 @@ import time
 from numpy import array
 
 from holypipette.controller import TaskController
-from holypipette.utils.supabaseDBstuff import supabase
+from holypipette.utils.supabaseInstance import supabase
 
 __all__ = ['Manipulator', 'ManipulatorError']
 
