@@ -76,5 +76,3 @@ dependencies:
     - statsmodels==0.14.0
     - tzdata==2023.3
     - zipp==3.17.0
-prefix: /Users/emilioaponte/miniconda3
-
