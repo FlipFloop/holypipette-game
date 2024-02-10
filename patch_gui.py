@@ -1,9 +1,5 @@
 import sys
 
-import os
-
-# from holypipette.utils.supabaseInstance import supabase
-
 from PyQt5 import QtWidgets, QtCore
 
 from holypipette.log_utils import console_logger

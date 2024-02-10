@@ -9,6 +9,7 @@ import imageio
 import sys
 import os
 from holypipette.utils.supabaseInstance import supabase
+from holypipette.utils.deviceSession import hashed_ID, sessionID
 
 
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
@@ -55,8 +56,7 @@ class WorldModel():
         self.time_to_seal = 5 #seconds
         self.is_near_cell = False
 
-        self.telemetry = Telemetry(is_enabled=False) # ! disable for packaging into exe
-        # self.telemetry = Telemetry(is_enabled=True) # ! disable for packaging into exe
+        self.telemetry = Telemetry(is_enabled=True, is_production=True) # ! enable is_production for packaging into exe
     
     def _setupPipetteResistances(self):
         self.normalResistance = np.random.randint(4e6, 7e6, dtype=np.int64) #4-7 Mohm
@@ -150,7 +150,8 @@ class WorldModel():
 
             if not self.is_near_cell:
                 self.is_near_cell = True
-                self.telemetry.logEvent(TelemetryEvent.CELL_APPROACHED)
+
+                self.telemetry.logEvent(TelemetryEvent.CELL_APPROACHED, coordinateY=pipettePos[1], coordinateX=pipettePos[0])
                 print('NEAR CELL!')
 
             if self.pressure.get_pressure() <= 0 and random.random() < 0.05: #5% chance of gigaseal per frame
@@ -208,8 +209,9 @@ class WorldModel():
         else:
             return False
         
-    def isCellAtPos(self, pipette_pos, screen_size=[1024, 1024]):
 
+    def convertPosToImageCoord(self, pipette_pos, screen_size=[1024, 1024]):
+        
         #get pipette micron coords
         pipette_x = pipette_pos[0]
         pipette_y = pipette_pos[1]
@@ -228,9 +230,20 @@ class WorldModel():
 
         #account for negatives
         while pipette_img_x < 0:
-            pipette_img_x = screen_size[1] + pipette_img_x 
+            pipette_img_x += screen_size[1]
         while pipette_img_y < 0:
-            pipette_img_y = screen_size[0] + pipette_img_y
+            pipette_img_y += screen_size[0]
+
+        print(f"Image X: {pipette_img_x}")
+        print(f"Image Y: {pipette_img_y}")
+
+        return pipette_img_x, pipette_img_y
+
+        
+    def isCellAtPos(self, pipette_pos, screen_size=[1024, 1024]):
+
+        pipette_img_x, pipette_img_y = self.convertPosToImageCoord(pipette_pos=pipette_pos, screen_size=screen_size)
+        
 
         return self._isCellAtPos(pipette_img_x, pipette_img_y)
 
@@ -252,8 +265,9 @@ class TelemetryEvent(Enum):
     CELL_APPROACHED = 'cell_approach'
 
 class Telemetry():
-    def __init__(self, is_enabled=True):
+    def __init__(self, is_enabled=True, is_production = False):
         self.is_enabled = is_enabled
+        self.is_production = is_production
 
         if not is_enabled:
             return
@@ -262,14 +276,16 @@ class Telemetry():
         self.fileName = "telemetry/telemetry_" + time_str + ".csv"
         self.initTime = time.time()
 
-    def logEvent(self, event:TelemetryEvent):
+    def logEvent(self, event:TelemetryEvent, coordinateX=-1, coordinateY=-1):
         if not self.is_enabled:
             return
         
         time_since_init = time.time() - self.initTime
-        supabase.table("telemetry").insert({"event": event.value, "time": time_since_init}).execute()
-        with open(self.fileName, 'a') as f:
-            f.write(f'{time_since_init}, {event.value}\n')
+        supabase.table("telemetry").insert({"deviceID": hashed_ID, "sessionID":sessionID, "event": event.value, "time_since_init": time_since_init, "coordinateX": coordinateX, "coordinateY": coordinateY}).execute()
+        
+        if not self.is_production:
+            with open(self.fileName, 'a') as f:
+                f.write(f'{time_since_init}, {event.value}\n')
 
 class FakeCalCamera(Camera):
     def __init__(self, stageManip=None, pipetteManip=None, image_z=0, targetFramerate=40, worldModel=None):

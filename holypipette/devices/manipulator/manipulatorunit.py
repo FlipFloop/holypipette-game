@@ -41,8 +41,10 @@ class ManipulatorUnit(Manipulator):
         '''
         if axis is None: # all positions in a vector
             #return array([self.dev.position(self.axes[axis]) for axis in range(len(self.axes))])
+            # print("no axis: ", self.dev.position_group(self.axes))
             return self.dev.position_group(self.axes)
         else:
+            # print("is axis: ", self.dev.position_group(self.axes[axis]))
             return self.dev.position(self.axes[axis])
 
     def absolute_move(self, x, axis = None, blocking=False):

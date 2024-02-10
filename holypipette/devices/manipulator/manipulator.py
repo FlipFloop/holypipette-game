@@ -69,15 +69,9 @@ class Manipulator(TaskController):
         axis: axis number
         x : position shift in um.
         '''
-        print(f"Stage was moved by {x} in the {axis} axis")
+        # print(f"Stage was moved by {x} in the {axis} axis")
         # x is 1
         # y is 2
-        # print(type(x))
-        
-        # if axis == 1:
-        #     supabase.table("stage_movement").insert({ "device_id": 32432, "x": int(x), "y": 0}).execute()
-        # else:
-        #     supabase.table("stage_movement").insert({ "device_id": 32432, "x": 0, "y": int(x)}).execute()
         self.absolute_move(self.position(axis)+x, axis)
 
     def position_group(self, axes):
