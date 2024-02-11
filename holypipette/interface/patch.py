@@ -94,8 +94,8 @@ class AutoPatchInterface(TaskInterface):
     def add_cell(self, position):
         #add half the size of the camera image to the position to get the center of the cell
         position = np.array(position)
-        position[0] += self.current_autopatcher.calibrated_unit.camera.width/2
-        position[1] += self.current_autopatcher.calibrated_unit.camera.height/2
+        position[0] += self.current_autopatcher.calibrated_unit.camera.width / 2
+        position[1] += self.current_autopatcher.calibrated_unit.camera.height / 2
         print(f'adding cell... {self.is_selecting_cells}')
         if self.is_selecting_cells:
             print('Adding cell at', position, 'to list of cells to patch')

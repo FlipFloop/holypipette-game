@@ -74,27 +74,33 @@ class WorldModel():
         return self.pipette_state == PipetteState.TIP_BROKEN_IN
     
     def logPressureAmbient(self):
-        self.telemetry.logEvent(TelemetryEvent.PRESSURE_AMBIENT)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PRESSURE_AMBIENT, coordinateX=x_pos_img, coordinateY=y_pos_img)
 
     def logPressureSealing(self):
-        self.telemetry.logEvent(TelemetryEvent.PRESSURE_SEALING)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PRESSURE_SEALING, coordinateX=x_pos_img, coordinateY=y_pos_img)
 
     def logPressureBreakIn(self):
-        self.telemetry.logEvent(TelemetryEvent.PRESSURE_BREAK_IN)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PRESSURE_BREAK_IN, coordinateX=x_pos_img, coordinateY=y_pos_img)
         
     def replacePipette(self):
         self._setupPipetteResistances() #new pipette, new resistances!
-        self.telemetry.logEvent(TelemetryEvent.PIPETTE_REPLACED)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PIPETTE_REPLACED, coordinateX=x_pos_img, coordinateY=y_pos_img)
         self.pipette_state = PipetteState.TIP_NORMAL
         print('PIPETTE NORMAL!')
     
     def breakPipette(self):
-        self.telemetry.logEvent(TelemetryEvent.PIPETTE_BROKEN)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PIPETTE_BROKEN, coordinateX=x_pos_img, coordinateY=y_pos_img)
         self.pipette_state = PipetteState.TIP_BROKEN
         print('PIPETTE BROKEN!')
 
     def cleanPipette(self):
-        self.telemetry.logEvent(TelemetryEvent.PIPETTE_CLEANED)
+        x_pos_img, y_pos_img = self.convertPosToImageCoord(pipette_pos=self.pipette.position())
+        self.telemetry.logEvent(TelemetryEvent.PIPETTE_CLEANED, coordinateX=x_pos_img, coordinateY=y_pos_img)
         if self.pipette_state == PipetteState.TIP_CLOGGED:
             self.pipette_state = PipetteState.TIP_NORMAL
             print('PIPETTE CLEANED!')
@@ -118,20 +124,24 @@ class WorldModel():
             if distFromSlip > 20 or self.pressure.get_pressure() > 10 or seal_dist > 20:
                 #moved too far away from the cell, lose seal
                 self.pipette_state = PipetteState.TIP_CLOGGED
-                self.telemetry.logEvent(TelemetryEvent.PIPETTE_CLOGGED)
+                x_pos_img, y_pos_img = self.convertPosToImageCoord(pipettePos)
+                self.telemetry.logEvent(TelemetryEvent.PIPETTE_CLOGGED, coordinateX=x_pos_img, coordinateY=y_pos_img)
                 print('PIPETTE CLOGGED!')
             
             if self.pressure.get_pressure() < -90 and self.pipette_state == PipetteState.TIP_SEALED:
                 #break in
                 self.pipette_state = PipetteState.TIP_BROKEN_IN
-                self.telemetry.logEvent(TelemetryEvent.BROKEN_IN)
+                x_pos_img, y_pos_img = self.convertPosToImageCoord(pipettePos)
+                self.telemetry.logEvent(TelemetryEvent.BROKEN_IN, coordinateX=x_pos_img, coordinateY=y_pos_img)
                 print('BREAK IN!')
             
             if self.pipette_state == PipetteState.TIP_SEALING:
                 #we're in the process of sealing
                 if time.time() - self.seal_time > self.time_to_seal:
                     self.pipette_state = PipetteState.TIP_SEALED
-                    self.telemetry.logEvent(TelemetryEvent.GIGASEAL)
+
+                    x_pos_img, y_pos_img = self.convertPosToImageCoord(pipettePos)
+                    self.telemetry.logEvent(TelemetryEvent.GIGASEAL, coordinateX=x_pos_img, coordinateY=y_pos_img)
                     self.seal_time = None
                     print('SEALED!')
                     return self._standardPipetteResistance()
@@ -151,7 +161,8 @@ class WorldModel():
             if not self.is_near_cell:
                 self.is_near_cell = True
 
-                self.telemetry.logEvent(TelemetryEvent.CELL_APPROACHED, coordinateY=pipettePos[1], coordinateX=pipettePos[0])
+                x_pos_img, y_pos_img = self.convertPosToImageCoord(pipettePos)
+                self.telemetry.logEvent(TelemetryEvent.CELL_APPROACHED, coordinateX=x_pos_img, coordinateY=y_pos_img)
                 print('NEAR CELL!')
 
             if self.pressure.get_pressure() <= 0 and random.random() < 0.05: #5% chance of gigaseal per frame
@@ -234,8 +245,8 @@ class WorldModel():
         while pipette_img_y < 0:
             pipette_img_y += screen_size[0]
 
-        print(f"Image X: {pipette_img_x}")
-        print(f"Image Y: {pipette_img_y}")
+        # print(f"Image X: {pipette_img_x}")
+        # print(f"Image Y: {pipette_img_y}")
 
         return pipette_img_x, pipette_img_y
 

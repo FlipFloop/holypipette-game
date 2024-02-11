@@ -286,6 +286,10 @@ class TaskInterface(QtCore.QObject, LoggingObject):
             if isinstance(controller, TaskController):
                 success = self._execute_single_task(controller, one_task,
                                                     one_argument)
+                
+                # print(success)
+                # print(one_argument)
+                # print(one_task)
                 if not success:
                     return
                 

@@ -29,6 +29,8 @@ from holypipette.interface.patch import NumberWithUnit
 from holypipette.interface.base import command
 from .livefeed import LiveFeedQt
 
+from holypipette.utils.supabaseInstance import supabase
+from holypipette.utils.deviceSession import hashed_ID, sessionID
 
 class Logger(QtCore.QAbstractTableModel, logging.Handler):
     def __init__(self):
@@ -766,14 +768,22 @@ class CameraGui(QtWidgets.QMainWindow):
         self.task_abort_button.setVisible(False)
         # 0: correct execution (no need to show a message)
         if exit_reason == 0:
+            supabase.table("event_statuses").insert({"deviceID": hashed_ID, "sessionID":sessionID, "event": str(self.running_task), "success": True}).execute()
             text = "Task '{}' finished successfully.".format(self.running_task)
             self.status_bar.setStyleSheet('QStatusBar{color: black;}')
             self.status_bar.showMessage(text, 5000)
+            print(self.running_task)
         # 1: an error occurred (error will be displayed via `error_status`)
+        elif exit_reason == 1:
+            supabase.table("event_statuses").insert({"deviceID": hashed_ID, "sessionID": sessionID, "event": str(self.running_task), "success": False}).execute()
+            print(self.running_task)
         elif exit_reason == 2:
+            print(self.running_task)
+            supabase.table("event_statuses").insert({"deviceID": hashed_ID, "sessionID": sessionID, "event": str(self.running_task), "success": False}).execute()
             text = "Task '{}' aborted.".format(self.running_task)
             self.status_bar.setStyleSheet('QStatusBar{color: black;}')
             self.status_bar.showMessage(text, 5000)
+            # print(self.running_task)
 
         # If the task was aborted or failed, and the "controller" object has a
         # saved state (e.g. the position of the pipette), ask the user whether
