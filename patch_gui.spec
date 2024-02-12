@@ -5,7 +5,7 @@ a = Analysis(
     ['patch_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('holypipette/devices/camera/FakeMicroscopeImgs/*','.'),('holypipette/gui/tutorial_media/XBox.png','.'),('pressure','pressure')],
+    datas=[('holypipette/devices/camera/FakeMicroscopeImgs/*','.'),('holypipette/gui/tutorial_media/XBox.png','.'),('pressure','pressure'), ('.env','.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
