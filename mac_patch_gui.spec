@@ -30,8 +30,7 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None,
-    onefile=True
+    entitlements_file=None
 )
 coll = COLLECT(
     exe,
