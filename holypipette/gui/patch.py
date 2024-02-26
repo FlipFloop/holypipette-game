@@ -25,7 +25,7 @@ class PatchGui(ManipulatorGui):
                  with_tracking=False):
         super(PatchGui, self).__init__(camera, pipette_interface,
                                        with_tracking=with_tracking)
-        self.setWindowTitle("Patch GUI")
+        self.setWindowTitle("Patch Clamp Simulator GUI")
         # Note that pipette interface already runs in a thread, we need to use
         # the same for the patch interface
         self.patch_interface = patch_interface
@@ -104,7 +104,7 @@ class TrackingPatchGui(PatchGui):
         super(TrackingPatchGui, self).__init__(camera, pipette_interface,
                                                patch_interface,
                                                with_tracking=True)
-        self.setWindowTitle("Patch GUI with tracking")
+        self.setWindowTitle("Patch Clamp Simulator GUI with tracking")
 
     def register_commands(self):
         super(TrackingPatchGui, self).register_commands()

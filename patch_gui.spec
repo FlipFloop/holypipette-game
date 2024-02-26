@@ -20,7 +20,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='Patch clamp simulator',
+    name='Patch Clamp Simulator',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -39,11 +39,11 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='Patch clamp simulator',
+    name='Patch Clamp Simulator',
 )
 app = BUNDLE(
     coll,
-    name='Patch clamp simulator.app',
+    name='Patch Clamp Simulator.app',
     icon='holypipette.icns',
     bundle_identifier=None,
 )

@@ -10,3 +10,4 @@ build/
 .DS_Store
 output
 telemetry/telemetry_*
+.env
