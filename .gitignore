@@ -11,3 +11,4 @@ build/
 output
 telemetry/telemetry_*
 .env
+*.zip
